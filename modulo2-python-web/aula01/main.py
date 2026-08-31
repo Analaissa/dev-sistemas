@@ -10,8 +10,7 @@ version='0.1.0'
 
 app.add_middleware(
 CORSMiddleware,
-allow_origins=['*'],
-# em producao, especificar o dominio do front
+allow_origins=['*'], # em producao, especificar o dominio do front
 allow_methods=['*'],
 allow_headers=['*'],
 )
@@ -29,7 +28,7 @@ def status():
 # Lista simulada de usuarios -- substitui o banco por enquanto
 usuarios_db = [
     {'id': 1, 'nome': 'Carlos Silva', 'cargo': 'Desenvolvedor', 'ativo': True},
-    {'id': 2, 'nome': 'Ana Lima', 'cargo': 'Designer', 'ativo': True},
+    {'id': 2, 'nome': 'Ana Laissa', 'cargo': 'Designer', 'ativo': True},
     {'id': 3, 'nome': 'Bruno Costa', 'cargo': 'QA', 'ativo': False},
 ]
 

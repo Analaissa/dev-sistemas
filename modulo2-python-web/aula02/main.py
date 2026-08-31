@@ -12,10 +12,20 @@ class Usuario(BaseModel):
     cargo: str
     ativo: bool = True # valor padrão
     salario: Optional[float] = None # campo opcional
+# Adicionar dentro da classe Usuario, após o validaor de cargo
 
-    @field_validator('nome')
-    @classmethod
-    def validar_nome(cls, v):
+@field_validator('') # qual campo vamos validar?
+@classmethod
+def validar_salario(cls, v):
+  if v is None:  # se não enviou salário, deixa passar
+      return v
+  if v <= 0:  # qual comparação bloqueia negativo e zero?
+   raise ValueError('salário inválido') # escreva uma mensagem de erro
+  return v
+  
+@field_validator('nome')
+@classmethod
+def validar_nome(cls, v):
         v = v.strip()
         if len(v) < 3:
             raise ValueError('Nome deve ter pelo menos 3 caracteres')
@@ -31,20 +41,37 @@ class UsuarioResposta(BaseModel):
     salario: Optional[float] = None
 
 usuarios_db: list[UsuarioResposta] = [
-    UsuarioResposta(id=1, nome='Alice Silva', email='alice@email.com',
-                    cargo='Design', ativo=True, salario=3800.0),
-    UsuarioResposta(id=2, nome='Danilo Santos', email='danilo@email.com',
-                    cargo='QA', ativo=True, salario=3200.0),
-    UsuarioResposta(id=3, nome='Max Muller', email='max@email.com',
-                        cargo='Dev', ativo=True, salario=4500.0),
+    UsuarioResposta(id=1, nome='Celina Souza', email='celina@email.com', cargo='Design', ativo=True, salario=3800.0),
+    UsuarioResposta(id=2, nome='Daniele Santos', email='daniele@email.com', cargo='QA', ativo=True, salario=3200.0),
+    UsuarioResposta(id=3, nome='Ana Laissa', email='ana@email.com', cargo='Dev', ativo=True, salario=4500.0),
+    UsuarioResposta(id=4, nome='Diana', email='diana@email.com', cargo='Product manager', ativo=True, salario=3900.0),
 ]
-proximo_id = 4
+proximo_id = 5
 
 # GET /usuarios - Lista todos os usuários
 @app.get('/usuarios', response_model=list[UsuarioResposta])
 def listar_usuario():
     return usuarios_db
+# Rota que retorna só os usuário ativos
+@app.get('/usuario/ativos', response_model=list[UsuarioResposta]) # qual modelo de resposta?
+def listar_ativos():
+    return [u for u in usuarios_db if u.ativo == True] # qual campo? qual valor?
 
+# Rota que filtra por cargo
+@app.get('/usuario/cargo/{cargo}', response_model=list[UsuarioResposta]) # nome do parãmetro
+def listar_por_cargo(cargo: str):
+    return [u for u in usuarios_db if u.cargo.lower()== cargo.lower()]
+
+# Rota de informações
+@app.get('/info', tags=['Geral']) # qual tag? use 'Geral'
+def info():
+    total = len(usuarios_db)  # qual função conta elementos de uma lista?
+    ativos = len([u for u in usuarios_db if u.ativo==True]) # filtrar os ativos
+    return{
+        'total_usuario': total,
+        'usuario_ativo': ativos,
+        'cargos_aceitos': ['Desenvolvedor', 'Designer', 'QA', 'Product manager'],
+    }
 # GET - busca pelo id
 @app.get('/usuarios/{usuario_id}', response_model=UsuarioResposta) 
 def buscar_usuario(usuario_id: int): 
