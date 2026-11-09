@@ -1,0 +1,3 @@
+SQLAIchemy
+FasAPI
+uvicorn
