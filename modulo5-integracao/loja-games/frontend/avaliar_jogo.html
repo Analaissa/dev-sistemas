@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avaliação  de jogo</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #c29ee4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: royalblue;
+            padding: 30px;
+            border-radius: 10px;
+            width: 350px;
+            box-shadow: 0 0 10px #ccc;
+        }
+        
+        h2 {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+        }
+
+        textarea, input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background-color: #6847df;
+            color: black;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #c29ee4;
+        }
+
+        #erro {
+            background-color: #6847df;
+        }
+
+        #sucesso {
+            color: #c29ee4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Avaliação de jogo</h2>
+
+        <form id="formulario">
+
+            <label for="comentario">Comentário:</label>
+            <textarea id="comentario" placeholder="Digite seu comentário"></textarea>
+
+            <label for="nota">Nota (1 a 5):</label>
+
+            <input type="number" id="nota" min="1" max="5">
+
+            <button type="submit">Enviar Avaliação</button>
+
+            <p id="erro"></p>
+            <p id="sucesso"></p>
+        </form>
+    </div>
+
+    <script>
+        const formulario = document.getElementById("formulario");
+        formulario.addEventListener("submit", function(event){
+            event.preventDefault();
+
+            const comentario = document.getElementById("comentario").value;
+            const nota = document.getElementById("nota").value;
+
+            const erro = document.getElementById("erro");
+            const sucesso = document.getElementById("sucesso");
+
+            erro.textContent = "";
+            sucesso.textContent = "";
+
+            // validação da nota
+            if (nota === "" || Number(nota)< 1 || Number(nota) > 5 ||! Number.isInteger(Number(nota))) {
+                erro.textContent = "A nota deve ser umnúmero inteiro entre 1 e 5.";
+                return;
+            }
+
+              // se tudo estiver válido
+              console.log({
+                comentario: comentario,
+                nota: Number(nota)
+              });
+
+              sucesso.textContent = "Avaliação enviada com sucesso!";
+        });
+    </script>
+</body>
+</html>
